@@ -1,0 +1,830 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Messaging;
+using System.Security.Cryptography;
+using System.Security.Policy;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using static System.Net.Mime.MediaTypeNames;
+
+namespace TesteForms
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void ClickJogador(Button botao)
+        {
+            if (lb_jogador1.Visible)
+            {
+                botao.Text = "X";
+                lb_jogador1.Visible = false;
+                lb_jogador2.Visible = true;
+            }
+            else
+            {
+                botao.Text = "O";
+                ConfereFimJogo();
+                lb_jogador2.Visible = false;
+                lb_jogador1.Visible = true;
+            }
+            botao.Enabled = false;
+        }
+
+        private void ClickComputador(Button botao)
+        {
+            botao.Text = "X";
+            botao.Enabled = false;
+
+            if (btn_cmpleigo.Visible || btn_cmpmed.Visible || btn_cmpint.Visible)
+            {
+                computador_leigo();
+            }
+        }
+
+        private void computador_leigo()
+        {
+            int contador = 0;
+
+            Random random = new Random();
+            Button[] botoes = { button1, button2, button3, button4, button5, button6, button7, button8, button9 };
+
+            if (!VerificaSeGanhou("X"))
+            {
+                while (true)
+                {
+                    Button botao = botoes.ElementAt(random.Next(botoes.Length));
+
+                    if (btn_cmpmed.Visible && computador_medio())
+                    {
+                        break;
+                    }
+
+                    if (btn_cmpint.Visible && computador_inteligente())
+                    {
+                        break;
+                    }
+
+                    if (botao.Text == "")
+                    {
+                        botao.Text = "O";
+                        botao.Enabled = false;
+                        break;
+                    }
+
+                    contador++;
+
+                    if (contador == botoes.Length)
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+
+        private bool computador_medio()
+        {
+            if (button1.Text == "X" && button2.Text == "X")
+            {
+                if (button3.Text == "")
+                {
+                    button3.Text = "O";
+                    button3.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button1.Text == "X" && button3.Text == "X")
+            {
+                if (button2.Text == "")
+                {
+                    button2.Text = "O";
+                    button2.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button1.Text == "X" && button4.Text == "X")
+            {
+                if (button7.Text == "")
+                {
+                    button7.Text = "O";
+                    button7.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button1.Text == "X" && button5.Text == "X")
+            {
+                if (button9.Text == "")
+                {
+                    button9.Text = "O";
+                    button9.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button1.Text == "X" && button7.Text == "X")
+            {
+                if (button4.Text == "")
+                {
+                    button4.Text = "O";
+                    button4.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button1.Text == "X" && button9.Text == "X")
+            {
+                if (button5.Text == "")
+                {
+                    button5.Text = "O";
+                    button5.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button2.Text == "X" && button3.Text == "X")
+            {
+                if (button1.Text == "")
+                {
+                    button1.Text = "O";
+                    button1.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button2.Text == "X" && button8.Text == "X")
+            {
+                if (button5.Text == "")
+                {
+                    button5.Text = "O";
+                    button5.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button2.Text == "X" && button5.Text == "X")
+            {
+                if (button8.Text == "")
+                {
+                    button8.Text = "O";
+                    button8.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button3.Text == "X" && button9.Text == "X")
+            {
+                if (button6.Text == "")
+                {
+                    button6.Text = "O";
+                    button6.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button3.Text == "X" && button6.Text == "X")
+            {
+                if (button9.Text == "")
+                {
+                    button9.Text = "O";
+                    button9.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button3.Text == "X" && button7.Text == "X")
+            {
+                if (button5.Text == "")
+                {
+                    button5.Text = "O";
+                    button5.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button3.Text == "X" && button5.Text == "X")
+            {
+                if (button7.Text == "")
+                {
+                    button7.Text = "O";
+                    button7.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button4.Text == "X" && button5.Text == "X")
+            {
+                if (button6.Text == "")
+                {
+                    button6.Text = "O";
+                    button6.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button4.Text == "X" && button6.Text == "X")
+            {
+                if (button5.Text == "")
+                {
+                    button5.Text = "O";
+                    button5.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button4.Text == "X" && button7.Text == "X")
+            {
+                if (button1.Text == "")
+                {
+                    button1.Text = "O";
+                    button1.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button5.Text == "X" && button7.Text == "X")
+            {
+                if (button3.Text == "")
+                {
+                    button3.Text = "O";
+                    button3.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button5.Text == "X" && button8.Text == "X")
+            {
+                if (button3.Text == "")
+                {
+                    button2.Text = "O";
+                    button2.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button5.Text == "X" && button9.Text == "X")
+            {
+                if (button1.Text == "")
+                {
+                    button1.Text = "O";
+                    button1.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button6.Text == "X" && button9.Text == "X")
+            {
+                if (button3.Text == "")
+                {
+                    button3.Text = "O";
+                    button3.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button7.Text == "X" && button9.Text == "X")
+            {
+                if (button8.Text == "")
+                {
+                    button8.Text = "O";
+                    button8.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button7.Text == "X" && button8.Text == "X")
+            {
+                if (button9.Text == "")
+                {
+                    button9.Text = "O";
+                    button9.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button8.Text == "X" && button9.Text == "X")
+            {
+                if (button7.Text == "")
+                {
+                    button7.Text = "O";
+                    button7.Enabled = false;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool computador_inteligente()
+        {
+
+            if (button1.Text == "O" && button2.Text == "O")
+            {
+                if (button3.Text == "")
+                {
+                    button3.Text = "O";
+                    button3.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button1.Text == "O" && button3.Text == "O")
+            {
+                if (button2.Text == "")
+                {
+                    button2.Text = "O";
+                    button2.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button1.Text == "O" && button4.Text == "O")
+            {
+                if (button7.Text == "")
+                {
+                    button7.Text = "O";
+                    button7.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button1.Text == "O" && button5.Text == "O")
+            {
+                if (button9.Text == "")
+                {
+                    button9.Text = "O";
+                    button9.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button1.Text == "O" && button7.Text == "O")
+            {
+                if (button4.Text == "")
+                {
+                    button4.Text = "O";
+                    button4.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button1.Text == "O" && button9.Text == "O")
+            {
+                if (button5.Text == "")
+                {
+                    button5.Text = "O";
+                    button5.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button2.Text == "O" && button3.Text == "O")
+            {
+                if (button1.Text == "")
+                {
+                    button1.Text = "O";
+                    button1.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button2.Text == "O" && button8.Text == "O")
+            {
+                if (button5.Text == "")
+                {
+                    button5.Text = "O";
+                    button5.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button2.Text == "O" && button5.Text == "O")
+            {
+                if (button8.Text == "")
+                {
+                    button8.Text = "O";
+                    button8.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button3.Text == "O" && button9.Text == "O")
+            {
+                if (button6.Text == "")
+                {
+                    button6.Text = "O";
+                    button6.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button3.Text == "O" && button6.Text == "O")
+            {
+                if (button9.Text == "")
+                {
+                    button9.Text = "O";
+                    button9.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button3.Text == "O" && button7.Text == "O")
+            {
+                if (button5.Text == "")
+                {
+                    button5.Text = "O";
+                    button5.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button3.Text == "O" && button5.Text == "O")
+            {
+                if (button7.Text == "")
+                {
+                    button7.Text = "O";
+                    button7.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button4.Text == "O" && button5.Text == "O")
+            {
+                if (button6.Text == "")
+                {
+                    button6.Text = "O";
+                    button6.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button4.Text == "O" && button6.Text == "O")
+            {
+                if (button5.Text == "")
+                {
+                    button5.Text = "O";
+                    button5.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button4.Text == "O" && button7.Text == "O")
+            {
+                if (button1.Text == "")
+                {
+                    button1.Text = "O";
+                    button1.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button5.Text == "O" && button7.Text == "O")
+            {
+                if (button3.Text == "")
+                {
+                    button3.Text = "O";
+                    button3.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button5.Text == "O" && button8.Text == "O")
+            {
+                if (button3.Text == "")
+                {
+                    button2.Text = "O";
+                    button2.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button5.Text == "O" && button9.Text == "O")
+            {
+                if (button1.Text == "")
+                {
+                    button1.Text = "O";
+                    button1.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button7.Text == "O" && button9.Text == "O")
+            {
+                if (button8.Text == "")
+                {
+                    button8.Text = "O";
+                    button8.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button7.Text == "O" && button8.Text == "O")
+            {
+                if (button9.Text == "")
+                {
+                    button9.Text = "O";
+                    button9.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button8.Text == "O" && button9.Text == "O")
+            {
+                if (button7.Text == "")
+                {
+                    button7.Text = "O";
+                    button7.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (computador_medio())
+            {
+                return true;
+            }
+
+            if (button1.Text == "X" || button3.Text == "X" || button7.Text == "X" || button9.Text == "X")
+            {
+                if (button5.Text == "")
+                {
+                    button5.Text = "O";
+                    button5.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button8.Text == "X")
+            {
+                if (button7.Text == "")
+                {
+                    button7.Text = "O";
+                    button7.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button6.Text == "X")
+            {
+                if (button9.Text == "")
+                {
+                    button9.Text = "O";
+                    button9.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button2.Text == "X")
+            {
+                if (button3.Text == "")
+                {
+                    button3.Text = "O";
+                    button3.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button4.Text == "X")
+            {
+                if (button7.Text == "")
+                {
+                    button7.Text = "O";
+                    button7.Enabled = false;
+                    return true;
+                }
+            }
+
+            if (button5.Text == "X")
+            {
+                if (button1.Text == "")
+                {
+                    button1.Text = "O";
+                    button1.Enabled = false;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool VerificaSeGanhou(string Jogador)
+        {
+            Button[,] Grade = new Button[3, 3] {
+                { button1, button2, button3 },
+                { button4, button5, button6 },
+                { button7, button8, button9 },
+            };
+
+            //Verifica linhas
+            for (int Linha = 0; Linha < 3; Linha++)
+            {
+                if (
+                    Grade[Linha, 0].Text == Jogador &&
+                    Grade[Linha, 1].Text == Jogador &&
+                    Grade[Linha, 2].Text == Jogador
+                    )
+                {
+                    desabilita_botao();
+                    return true;
+                }
+            }
+
+            //Verifica colunas
+            for (int Coluna = 0; Coluna < 3; Coluna++)
+            {
+                if (
+                    Grade[0, Coluna].Text == Jogador &&
+                    Grade[1, Coluna].Text == Jogador &&
+                    Grade[2, Coluna].Text == Jogador
+                    )
+                {
+                    desabilita_botao();
+                    return true;
+                }
+            }
+
+            //Verifica diagonais
+            if (
+                Grade[0, 0].Text == Jogador &&
+                Grade[1, 1].Text == Jogador &&
+                Grade[2, 2].Text == Jogador
+                )
+            {
+                desabilita_botao();
+                return true;
+            }
+
+            if (
+                Grade[0, 2].Text == Jogador &&
+                Grade[1, 1].Text == Jogador &&
+                Grade[2, 0].Text == Jogador
+                )
+            {
+                desabilita_botao();
+                return true;
+            }
+
+            return false;
+
+        }
+
+        private void desabilita_botao()
+        {
+            button1.Enabled = false;
+            button2.Enabled = false;
+            button3.Enabled = false;
+            button4.Enabled = false;
+            button5.Enabled = false;
+            button6.Enabled = false;
+            button7.Enabled = false;
+            button8.Enabled = false;
+            button9.Enabled = false;
+        }
+
+        private void VerificaDeuVelha()
+        {
+            if (
+                button1.Text != string.Empty &&
+                button2.Text != string.Empty &&
+                button3.Text != string.Empty &&
+                button4.Text != string.Empty &&
+                button5.Text != string.Empty &&
+                button6.Text != string.Empty &&
+                button7.Text != string.Empty &&
+                button8.Text != string.Empty &&
+                button9.Text != string.Empty
+                )
+            {
+                MessageBox.Show("Deu velha!");
+            }
+        }
+
+        private void ConfereFimJogo()
+        {
+            if (VerificaSeGanhou("X"))
+            {
+                MessageBox.Show("JOGADOR 1 VENCEU");
+                numupdw_jogador1.Value += 1;
+            }
+            else if (VerificaSeGanhou("O"))
+            {
+                if (lb_jogador2.Visible)
+                {
+                    MessageBox.Show("JOGADOR 2 VENCEU");
+                    numupdw_jogador2.Value += 1;
+                }
+
+                if (
+                    !btn_cmpleigo.Enabled ||
+                    !btn_cmpmed.Enabled ||
+                    !btn_cmpint.Enabled
+                    )
+                {
+                    MessageBox.Show("O COMPUTADOR VENCEU");
+                    numupdw_jogador2.Value += 1;
+                }
+            }
+            else
+            {
+                VerificaDeuVelha();
+            }
+        }
+
+        private void DesativaComputador()
+        {
+            if (btn_cmpleigo.Enabled && btn_cmpmed.Enabled && btn_cmpint.Enabled)
+            {
+                btn_cmpleigo.Visible = false;
+                btn_cmpmed.Visible = false;
+                btn_cmpint.Visible = false;
+            }
+        }
+
+        private void button_board_Click(object sender, EventArgs e)
+        {
+            DesativaComputador();
+
+            if (!btn_cmpleigo.Enabled || !btn_cmpmed.Enabled || !btn_cmpint.Enabled)
+            {
+                this.ClickComputador((Button)sender);
+            }
+            else
+            {
+                this.ClickJogador((Button)sender);
+            }
+
+            this.ConfereFimJogo();
+        }
+
+        private void btn_reiniciar_Click(object sender, EventArgs e)
+        {
+            button1.ResetText();
+            button2.ResetText();
+            button3.ResetText();
+            button4.ResetText();
+            button5.ResetText();
+            button6.ResetText();
+            button7.ResetText();
+            button8.ResetText();
+            button9.ResetText();
+
+            button1.Enabled = true;
+            button2.Enabled = true;
+            button3.Enabled = true;
+            button4.Enabled = true;
+            button5.Enabled = true;
+            button6.Enabled = true;
+            button7.Enabled = true;
+            button8.Enabled = true;
+            button9.Enabled = true;
+
+            btn_cmpleigo.Enabled = true;
+            btn_cmpmed.Enabled = true;
+            btn_cmpint.Enabled = true;
+            btn_cmpleigo.Visible = true;
+            btn_cmpmed.Visible = true;
+            btn_cmpint.Visible = true;
+            lb_jogador1.Visible = true;
+            lb_jogador2.Visible = true;
+        }
+
+        private void btn_cmpleigo_Click(object sender, EventArgs e)
+        {
+            lb_jogador2.Visible = false;
+            lb_computador.Visible = false;
+            btn_cmpmed.Visible = false;
+            btn_cmpint.Visible = false;
+
+            btn_cmpleigo.Enabled = false;
+        }
+
+        private void btn_cmpmed_Click(object sender, EventArgs e)
+        {
+            lb_jogador2.Visible = false;
+            lb_computador.Visible = false;
+            btn_cmpleigo.Visible = false;
+            btn_cmpint.Visible = false;
+
+            btn_cmpmed.Enabled = false;
+        }
+
+        private void btn_cmpint_Click(object sender, EventArgs e)
+        {
+            lb_jogador2.Visible = false;
+            lb_computador.Visible = false;
+            btn_cmpleigo.Visible = false;
+            btn_cmpmed.Visible = false;
+
+            btn_cmpint.Enabled = false;
+        }
+    }
+}
